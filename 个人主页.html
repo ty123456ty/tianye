@@ -1,0 +1,504 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>田野 · 少儿编程讲师 | 课程研发</title>
+<meta name="description" content="资深少儿编程讲师与课程研发者，专注 Scratch、Python 与机器人教育，面向家长与教育机构。">
+<style>
+/* ========== 设计系统 ========== */
+:root {
+  --navy: #1B3A5C;
+  --navy-deep: #12283F;
+  --navy-soft: #2C537D;
+  --accent: #E8A33D;
+  --ink: #1E2A38;
+  --ink-2: #55647A;
+  --paper: #FBFBF9;
+  --line: #E4E8EE;
+  --radius: 14px;
+  --shadow: 0 10px 30px rgba(27, 58, 92, 0.10);
+  --shadow-hover: 0 18px 44px rgba(27, 58, 92, 0.16);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body {
+  font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  color: var(--ink);
+  background: var(--paper);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+.container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+section { padding: 96px 0; }
+
+/* ========== 导航 ========== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(251, 251, 249, 0.9);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+  height: 64px;
+}
+.nav-inner {
+  max-width: 1120px; margin: 0 auto; padding: 0 24px;
+  height: 64px; display: flex; align-items: center; justify-content: space-between;
+}
+.brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--navy); font-size: 1.05rem; }
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: var(--navy); color: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.95rem; font-weight: 700;
+}
+.nav-links { display: flex; gap: 34px; font-size: 0.95rem; }
+.nav-links a { color: var(--ink-2); transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--navy); font-weight: 600; }
+.nav-toggle {
+  display: none; background: none; border: none; cursor: pointer; padding: 8px;
+}
+.nav-toggle span { display: block; width: 22px; height: 2px; background: var(--navy); margin: 5px 0; border-radius: 2px; transition: 0.25s; }
+.mobile-menu {
+  display: none; flex-direction: column; padding: 12px 24px 20px;
+  background: var(--paper); border-bottom: 1px solid var(--line);
+}
+.mobile-menu a { padding: 10px 0; color: var(--ink-2); border-bottom: 1px solid var(--line); }
+.mobile-menu.open { display: flex; }
+
+/* ========== Hero ========== */
+.hero {
+  padding-top: 152px; padding-bottom: 96px;
+  background:
+    radial-gradient(1100px 500px at 85% -10%, rgba(27, 58, 92, 0.06), transparent 60%),
+    var(--paper);
+}
+.hero-grid { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 56px; align-items: center; }
+.kicker {
+  display: inline-block; font-size: 0.8rem; letter-spacing: 0.16em;
+  color: var(--navy-soft); font-weight: 600; margin-bottom: 20px;
+}
+.hero h1 {
+  font-size: clamp(2.1rem, 4.4vw, 3.4rem); line-height: 1.18;
+  letter-spacing: -0.01em; color: var(--navy); font-weight: 800;
+  margin-bottom: 22px;
+}
+.hero h1 em { font-style: normal; color: var(--accent); }
+.hero p.lead { font-size: 1.08rem; color: var(--ink-2); max-width: 34em; margin-bottom: 36px; }
+.hero-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 30px; border-radius: 999px;
+  font-size: 1rem; font-weight: 600; cursor: pointer; border: none;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.btn-primary { background: var(--navy); color: var(--paper); box-shadow: var(--shadow); }
+.btn-primary:hover { background: var(--navy-deep); transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+.btn-ghost { background: transparent; color: var(--navy); border: 1.5px solid var(--line); }
+.btn-ghost:hover { border-color: var(--navy); transform: translateY(-2px); }
+.hero-figure { position: relative; }
+.hero-figure img {
+  border-radius: 20px; box-shadow: var(--shadow-hover); width: 100%; aspect-ratio: 16/11; object-fit: cover;
+}
+.hero-stats {
+  position: absolute; left: 20px; bottom: -26px;
+  background: var(--paper); border-radius: var(--radius); box-shadow: var(--shadow-hover);
+  padding: 16px 24px; display: flex; gap: 28px;
+}
+.hero-stats .stat b { display: block; font-size: 1.25rem; color: var(--navy); }
+.hero-stats .stat span { font-size: 0.8rem; color: var(--ink-2); }
+
+/* ========== 区块标题 ========== */
+.section-head { margin-bottom: 52px; }
+.section-head h2 {
+  font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--navy); font-weight: 800; letter-spacing: -0.01em;
+}
+.section-head p { color: var(--ink-2); margin-top: 12px; max-width: 40em; }
+
+/* ========== 关于我 ========== */
+.about { background: var(--paper); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; }
+.about-figure img { border-radius: 20px; box-shadow: var(--shadow); aspect-ratio: 4/3; object-fit: cover; }
+.about-text p { color: var(--ink-2); margin-bottom: 18px; }
+.skill-tags { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 26px; }
+.tag {
+  padding: 7px 16px; border-radius: 999px; font-size: 0.88rem;
+  background: rgba(27, 58, 92, 0.06); color: var(--navy); font-weight: 500;
+}
+.about-numbers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 34px; }
+.about-numbers .num { border-left: 3px solid var(--accent); padding-left: 14px; }
+.about-numbers b { display: block; font-size: 1.5rem; color: var(--navy); }
+.about-numbers span { font-size: 0.85rem; color: var(--ink-2); }
+
+/* ========== 课程项目 ========== */
+.cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+.card {
+  background: var(--paper); border: 1px solid var(--line); border-radius: var(--radius);
+  padding: 30px 26px; transition: transform 0.25s, box-shadow 0.25s, border-color 0.25s;
+}
+.card:hover { transform: translateY(-6px); box-shadow: var(--shadow-hover); border-color: rgba(27,58,92,0.25); }
+.card-icon {
+  width: 46px; height: 46px; border-radius: 12px; background: var(--navy);
+  color: var(--paper); display: flex; align-items: center; justify-content: center;
+  font-size: 1.2rem; margin-bottom: 20px; font-weight: 700;
+}
+.card h3 { font-size: 1.1rem; color: var(--navy); margin-bottom: 10px; }
+.card p { font-size: 0.93rem; color: var(--ink-2); margin-bottom: 16px; }
+.card-meta { font-size: 0.8rem; color: var(--navy-soft); font-weight: 600; letter-spacing: 0.04em; }
+
+/* ========== 荣誉证书 ========== */
+.honors { background: var(--navy); color: var(--paper); }
+.honors .section-head h2 { color: var(--paper); }
+.honors .section-head p { color: rgba(255,255,255,0.72); }
+.honor-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+.honor-item {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.14);
+  border-radius: var(--radius); padding: 24px 26px;
+  display: flex; gap: 18px; align-items: flex-start;
+  transition: background 0.25s, transform 0.25s;
+}
+.honor-item:hover { background: rgba(255,255,255,0.1); transform: translateY(-4px); }
+.honor-badge {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--accent); color: var(--navy-deep);
+  display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.05rem;
+}
+.honor-item h3 { font-size: 1rem; margin-bottom: 4px; }
+.honor-item span { font-size: 0.85rem; color: rgba(255,255,255,0.65); }
+
+/* ========== 联系 ========== */
+.contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; }
+.contact-info h2 { font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--navy); font-weight: 800; margin-bottom: 16px; }
+.contact-info p { color: var(--ink-2); margin-bottom: 30px; max-width: 30em; }
+.contact-line { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.contact-line .icon {
+  width: 40px; height: 40px; border-radius: 10px; background: rgba(27,58,92,0.07);
+  color: var(--navy); display: flex; align-items: center; justify-content: center; flex: none;
+}
+.contact-line b { display: block; font-size: 0.9rem; color: var(--navy); }
+.contact-line span { font-size: 0.9rem; color: var(--ink-2); }
+.form {
+  background: var(--paper); border: 1px solid var(--line); border-radius: 18px;
+  padding: 36px; box-shadow: var(--shadow);
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.field { margin-bottom: 18px; }
+.field label { display: block; font-size: 0.88rem; font-weight: 600; color: var(--navy); margin-bottom: 7px; }
+.field input, .field select, .field textarea {
+  width: 100%; padding: 13px 15px; border: 1.5px solid var(--line); border-radius: 10px;
+  font-size: 0.95rem; font-family: inherit; color: var(--ink); background: var(--paper);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--navy); box-shadow: 0 0 0 3px rgba(27,58,92,0.12);
+}
+.field textarea { resize: vertical; min-height: 110px; }
+.form-note { font-size: 0.82rem; color: var(--ink-2); margin-top: 14px; text-align: center; }
+.form-success {
+  display: none; text-align: center; padding: 30px 10px; color: var(--navy); font-weight: 600;
+}
+.form-success.show { display: block; }
+
+/* ========== 页脚 ========== */
+footer { background: var(--navy-deep); color: rgba(255,255,255,0.7); padding: 36px 0; font-size: 0.88rem; }
+.footer-inner { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; }
+footer .brand { color: var(--paper); }
+footer a:hover { color: var(--paper); }
+
+/* ========== 滚动浮现 ========== */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .card:hover, .honor-item:hover, .btn:hover { transform: none; }
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 900px) {
+  section { padding: 72px 0; }
+  .hero { padding-top: 120px; }
+  .hero-grid, .about-grid, .contact-grid { grid-template-columns: 1fr; gap: 44px; }
+  .cards-grid { grid-template-columns: 1fr 1fr; }
+  .honor-list { grid-template-columns: 1fr; }
+  .hero-stats { position: static; margin-top: 20px; justify-content: center; }
+}
+@media (max-width: 640px) {
+  .nav-links { display: none; }
+  .nav-toggle { display: block; }
+  .cards-grid { grid-template-columns: 1fr; }
+  .form { padding: 26px 20px; }
+  .form-row { grid-template-columns: 1fr; }
+  .about-numbers { grid-template-columns: 1fr; gap: 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- 导航 -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#hero" class="brand"><span class="brand-mark">田</span>田野 · 少儿编程</a>
+    <div class="nav-links" id="navLinks">
+      <a href="#about">关于我</a>
+      <a href="#projects">课程与研发</a>
+      <a href="#honors">荣誉证书</a>
+      <a href="#contact">联系方式</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="打开菜单">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#about">关于我</a>
+    <a href="#projects">课程与研发</a>
+    <a href="#honors">荣誉证书</a>
+    <a href="#contact">联系方式</a>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero" id="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="kicker">少儿编程讲师 · 课程研发</span>
+      <h1>让孩子从<strong>玩游戏</strong>到<em>创造作品</em></h1>
+      <p class="lead">你好，我是田野。3 年少儿编程教学经验，主教 Scratch、Python 与机器人课程，同时主导多套体系化课程研发，已陪伴 300+ 名孩子迈出编程第一步。</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#contact">预约免费试听</a>
+        <a class="btn btn-ghost" href="#projects">查看课程</a>
+      </div>
+    </div>
+    <div class="hero-figure reveal">
+      <img src="https://g.cdn.meoo.host/l297erlla40o/ai-images/hero插画.png?auth_key=329846c24776a7760313915786c08087f239fa35ac62b9bac9a78ee03451b32c" alt="孩子们在课堂上学习编程与搭建机器人的插画">
+      <div class="hero-stats">
+        <div class="stat"><b>3 年</b><span>教学经验</span></div>
+        <div class="stat"><b>300+</b><span>学员家庭</span></div>
+        <div class="stat"><b>6 套</b><span>自研课程</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- 关于我 -->
+<section class="about" id="about">
+  <div class="container about-grid">
+    <div class="about-figure reveal">
+      <img src="https://g.cdn.meoo.host/l297erlla40o/ai-images/教学场景.png?auth_key=c22f020e381946b026389bbf4daeb1f8889a37a50c20faeea1c78a0fd3e0f16a" alt="田野老师在课堂上辅导孩子学习编程">
+    </div>
+    <div class="about-text">
+      <div class="section-head" style="margin-bottom:24px;">
+        <h2>关于我</h2>
+      </div>
+      <p>我是一名资深少儿编程讲师，也是课程研发者。三年来，我把课堂上讲得最多的两句话坚持了下来：先让孩子觉得"好玩"，再让他觉得"我能做到"。</p>
+      <p>我教的课程覆盖 6 到 14 岁：低龄段用 Scratch 积木搭建建立逻辑思维，进阶段用 Python 走向真实代码，机器人课程则把程序搬到孩子亲手组装的小车上。除了一线教学，我还主导研发了完整的阶段化课程体系，让每个孩子都能沿着清晰的路径成长。</p>
+      <div class="skill-tags">
+        <span class="tag">Scratch 图形化编程</span>
+        <span class="tag">Python 代码编程</span>
+        <span class="tag">机器人搭建与控制</span>
+        <span class="tag">信息学竞赛启蒙</span>
+        <span class="tag">课程体系设计</span>
+        <span class="tag">师资培训</span>
+      </div>
+      <div class="about-numbers">
+        <div class="num"><b>300+</b><span>授课学员</span></div>
+        <div class="num"><b>1800+</b><span>累计课时</span></div>
+        <div class="num"><b>40+</b><span>学员获奖</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 课程与研发项目 -->
+<section id="projects">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>教学与课程研发项目</h2>
+      <p>每一门课程都经过真实课堂打磨，从教案、课件到课后反馈形成完整闭环。</p>
+    </div>
+    <div class="cards-grid">
+      <article class="card reveal">
+        <div class="card-icon">S</div>
+        <h3>Scratch 创意编程课</h3>
+        <p>面向 6-9 岁孩子的图形化编程体系，用动画与小游戏作品驱动学习，从"拖积木"进阶到独立完成 300+ 行逻辑的完整项目。</p>
+        <div class="card-meta">4 阶段 · 48 课时 · 自研课件</div>
+      </article>
+      <article class="card reveal">
+        <div class="card-icon">P</div>
+        <h3>Python 进阶代码课</h3>
+        <p>10-14 岁孩子的代码启蒙路线，从语法基础到数据结构与小游戏开发，衔接信息学竞赛，多名学员通过等级考试。</p>
+        <div class="card-meta">3 阶段 · 60 课时 · 竞赛衔接</div>
+      </article>
+      <article class="card reveal">
+        <div class="card-icon">R</div>
+        <h3>机器人搭建与控制课</h3>
+        <p>机械结构、传感器与编程控制三线并进，孩子亲手组装循迹小车、机械臂等作品，参加区域机器人挑战赛。</p>
+        <div class="card-meta">主题制 · 40 课时 · 赛事实战</div>
+      </article>
+      <article class="card reveal">
+        <div class="card-icon">体</div>
+        <h3>阶段化课程体系研发</h3>
+        <p>主导设计机构 6-14 岁全年龄段课程地图，统一教案模板与学员能力评估表，已在 3 家校区落地使用。</p>
+        <div class="card-meta">体系设计 · 标准化教案</div>
+      </article>
+      <article class="card reveal">
+        <div class="card-icon">营</div>
+        <h3>PBL 主题编程营</h3>
+        <p>寒暑期项目制学习营，围绕"智慧校园""环保助手"等真实命题，孩子以小组为单位完成调研、设计与作品路演。</p>
+        <div class="card-meta">项目制 · 小组协作 · 作品路演</div>
+      </article>
+      <article class="card reveal">
+        <div class="card-icon">师</div>
+        <h3>师资培训与教研支持</h3>
+        <p>面向机器人教育行业伙伴提供讲师培训，覆盖课堂管理、教案使用与家长沟通，已帮助 20+ 名新讲师独立带班。</p>
+        <div class="card-meta">行业赋能 · 培训 20+ 讲师</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- 荣誉证书 -->
+<section class="honors" id="honors">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2>荣誉与证书</h2>
+      <p>教学路上的阶段性认可，也是持续精进的动力。</p>
+    </div>
+    <div class="honor-list">
+      <div class="honor-item reveal">
+        <div class="honor-badge">证</div>
+        <div>
+          <h3>青少年编程教育教师资格认证</h3>
+          <span>中国电子学会 · 编程等级考试指导教师资格</span>
+        </div>
+      </div>
+      <div class="honor-item reveal">
+        <div class="honor-badge">赛</div>
+        <div>
+          <h3>优秀指导教师奖</h3>
+          <span>全国青少年机器人技术等级大赛 · 学员获省级一等奖</span>
+        </div>
+      </div>
+      <div class="honor-item reveal">
+        <div class="honor-badge">奖</div>
+        <div>
+          <h3>年度金牌讲师</h3>
+          <span>任职机构 · 学员续报率与满意度双第一</span>
+        </div>
+      </div>
+      <div class="honor-item reveal">
+        <div class="honor-badge">研</div>
+        <div>
+          <h3>课程研发成果奖</h3>
+          <span>主导研发的阶段化课程体系获机构年度最佳教研项目</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 联系 -->
+<section id="contact">
+  <div class="container contact-grid">
+    <div class="contact-info">
+      <h2>聊聊孩子的编程学习</h2>
+      <p>无论您是想为孩子规划编程学习路径的家长，还是希望合作课程研发的教育机构，都欢迎随时联系我。</p>
+      <div class="contact-line">
+        <div class="icon">✉</div>
+        <div><b>邮箱</b><span>tianye.coding@example.com</span></div>
+      </div>
+      <div class="contact-line">
+        <div class="icon">微</div>
+        <div><b>微信</b><span>扫码或搜索：TianyeTeach（备注"试听"）</span></div>
+      </div>
+      <div class="contact-line">
+        <div class="icon">时</div>
+        <div><b>咨询时间</b><span>工作日 14:00-21:00，周末全天</span></div>
+      </div>
+    </div>
+    <form class="form" id="contactForm">
+      <div id="formBody">
+        <div class="form-row">
+          <div class="field">
+            <label for="name">您的称呼</label>
+            <input type="text" id="name" name="name" placeholder="如：李女士" required>
+          </div>
+          <div class="field">
+            <label for="identity">咨询身份</label>
+            <select id="identity" name="identity">
+              <option value="家长">家长</option>
+              <option value="教育机构">教育机构</option>
+              <option value="其他">其他</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="email">邮箱</label>
+            <input type="email" id="email" name="email" placeholder="用于接收回复" required>
+          </div>
+          <div class="field">
+            <label for="wechat">微信号（选填）</label>
+            <input type="text" id="wechat" name="wechat" placeholder="方便快速沟通">
+          </div>
+        </div>
+        <div class="field">
+          <label for="message">想了解的内容</label>
+          <textarea id="message" name="message" placeholder="例如：孩子 8 岁，想了解 Scratch 入门课程安排" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center;">发送咨询</button>
+        <p class="form-note">提交后我会尽快回复，通常不超过 24 小时。</p>
+      </div>
+      <div class="form-success" id="formSuccess">✓ 已收到您的咨询，我会尽快通过邮箱或微信与您联系。</div>
+    </form>
+  </div>
+</section>
+
+<!-- 页脚 -->
+<footer>
+  <div class="container footer-inner">
+    <span class="brand"><span class="brand-mark" style="background:var(--accent);color:var(--navy-deep);">田</span>田野 · 少儿编程讲师</span>
+    <span>© 2026 田野教学工作室 · 用孩子的语言，教未来的技能</span>
+  </div>
+</footer>
+
+<script>
+// 移动端菜单
+const navToggle = document.getElementById('navToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+navToggle.addEventListener('click', () => mobileMenu.classList.toggle('open'));
+mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => mobileMenu.classList.remove('open')));
+
+// 滚动浮现动画（IntersectionObserver，无 scroll 监听）
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
+  });
+}, { threshold: 0.12 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// 导航当前区块高亮
+const navMap = {};
+document.querySelectorAll('#navLinks a').forEach(a => navMap[a.getAttribute('href').slice(1)] = a);
+const sectionObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting && navMap[e.target.id]) {
+      Object.values(navMap).forEach(a => a.classList.remove('active'));
+      navMap[e.target.id].classList.add('active');
+    }
+  });
+}, { rootMargin: '-40% 0px -55% 0px' });
+document.querySelectorAll('section[id], header[id]').forEach(s => sectionObserver.observe(s));
+
+// 表单提交（纯前端演示）
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  document.getElementById('formBody').style.display = 'none';
+  document.getElementById('formSuccess').classList.add('show');
+});
+</script>
+</body>
+</html>
